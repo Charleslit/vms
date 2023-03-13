@@ -18,7 +18,9 @@ type Vehicle struct {
 
 func main() {
 	// Open a database connection
-	db, err := sql.Open("mysql", "user:password@tcp(host:port)/vehicle_management")
+	db, err := sql.Open("mysql", "user:password@tcp(localhost:3306)/vehicle_management")
+//db, err := sql.Open("sqlite3", "./vehicle_management.db")
+// forconnecting to sqlite3 database in the directory 
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
