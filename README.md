@@ -19,3 +19,5 @@ vms(
     Reporting and analytics: The system can generate reports and analytics to help organizations analyze vehicle data and identify areas for improvement.
 
 Overall, a Vehicle Management System can help organizations optimize their fleet operations, reduce costs, and improve safety and compliance.)
+![face2](https://user-images.githubusercontent.com/74789224/226000594-a0387223-9e39-4a44-bc49-3d77b3dcfc49.svg)
+[^1]: contact
