@@ -1,4 +1,4 @@
-package main
+package mantainance
 
 import (
 	"database/sql"
