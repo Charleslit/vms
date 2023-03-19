@@ -1,4 +1,4 @@
-package driverm.s
+package driver
 
 import (
 	"database/sql"
@@ -23,7 +23,7 @@ func driver() {
 	// Open a database connection
 	db, err := sql.Open("mysql", "user:password@tcp(localhost:3306)/driver_management")
 	//db, err := sql.Open("sqlite3", "./driver_management.db")
-	// for connecting to sqlite3 database in the directory 
+	// for connecting to sqlite3 database in the directory
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
