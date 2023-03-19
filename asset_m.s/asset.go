@@ -1,4 +1,4 @@
-package main
+package asset_m.s
 
 import (
 	"database/sql"
