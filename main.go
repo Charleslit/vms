@@ -15,38 +15,31 @@ import (
 
 func main() {
 	// Open a database connection
-	db, err := sql.Open("mysql", "user:password@tcp(localhost:3306)/vehicle_management")
-	//db, err := sql.Open("sqlite3", "./vehicle_management.db")
-	// for connecting to sqlite3 database in the directory
+	db, err := sql.Open("mysql", "user:password@tcp(localhost:3306)/mydb")
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
 	defer db.Close()
 
-	// Schedule maintenance for all vehicles that haven't been serviced in the last 6 months or 5000 miles
-	vehicles, err := maintenance.GetVehiclesForMaintenance(db, time.Now(), 6*time.Month, 5000)
+	// Get all vehicles due for mantain
+	vehicles, err := mantain.GetVehiclesForMaintenance(db, time.Now(), 6*time.Month, 5000)
 	if err != nil {
-		log.Fatalf("Failed to get vehicles for maintenance: %v", err)
+		log.Fatalf("Failed to get vehicles for mantain: %v", err)
 	}
 
-	for _, vehicle := range vehicles {
-		// Create a maintenance task
-		task := maintenance.CreateMaintenanceTask(vehicle, time.Now())
+	// Schedule mantain tasks for each vehicle
+	for _, v := range vehicles {
 
-		// Insert the maintenance task into the database
-		stmt, err := db.Prepare("INSERT INTO maintenance_tasks (vehicle_id, task_name, task_description, due_date) VALUES (?, ?, ?, ?)")
-		if err != nil {
-			log.Fatalf("Failed to prepare insert statement: %v", err)
-		}
-		_, err = stmt.Exec(task.VehicleID, task.TaskName, task.TaskDescription, task.DueDate)
-		if err != nil {
-			log.Fatalf("Failed to insert maintenance task into database: %v", err)
+		task := mantain.CreateMaintenanceTask(v, time.Now(), "Maintenance", "Regular maintenance check", 6*time.Month)
+
+		if err := mantain.InsertMaintenanceTask(db, task); err != nil {
+			log.Fatalf("Failed to insert mantain task into database: %v", err)
 		}
 
-		fmt.Printf("Scheduled maintenance task for vehicle %d: %s\n", vehicle.ID, task.TaskName)
+		fmt.Printf("Scheduled mantain task for vehicle %d: %s\n", v.ID, task.TaskName)
 	}
 
-	// Create an accident report
+	// Report an incident
 	report := &incidents.Accident{
 		VehicleID:    1,
 		Type:         "Collision",
@@ -54,8 +47,7 @@ func main() {
 		ReportedTime: time.Now(),
 	}
 
-	err = incidents.CreateAccident(db, report)
-	if err != nil {
+	if err := incidents.CreateAccident(db, report); err != nil {
 		log.Fatalf("Failed to create accident report: %v", err)
 	}
 

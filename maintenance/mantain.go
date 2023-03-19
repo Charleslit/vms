@@ -77,4 +77,14 @@ func (t *MaintenanceTask) ScheduleNext() {
 	t.DueDate = t.LastDone.Add(t.Frequency)
 }
 
-func CreateMaintenanceTask(asset Asset, taskName, taskDescription string, frequency time.Duration) MaintenanceTask
+func CreateMaintenanceTask(asset Asset, dueDate time.Time, taskName, taskDescription string, frequency time.Duration) MaintenanceTask {
+	return MaintenanceTask{
+		AssetID:         asset.GetID(),
+		AssetName:       asset.GetName(),
+		TaskName:        taskName,
+		TaskDescription: taskDescription,
+		DueDate:         dueDate,
+		Frequency:       frequency,
+		LastDone:        time.Time{},
+	}
+}
