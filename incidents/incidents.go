@@ -10,39 +10,29 @@ import (
 )
 
 type Incident struct {
-	ID           int
-	Type         string
-	Description  string
-	ReportedTime time.Time
+	ID           int       `db:"id"`
+	Type         string    `db:"incident_type"`
+	Description  string    `db:"incident_description"`
+	ReportedTime time.Time `db:"reported_time"`
 }
 
 type Accident struct {
 	Incident
-	VehicleID int
+	VehicleID int `db:"vehicle_id"`
 }
 
-func accident() {
-	
-
-	// Create an accident report
-	report := Accident{
-		Incident: Incident{
-			Type:         "collision",
-			Description:  "Driver rear-ended another vehicle at an intersection",
-			ReportedTime: time.Now(),
-		},
-		VehicleID: 123,
-	}
-
+func CreateAccident(db *sql.DB, report *Accident) error {
 	// Insert the accident report into the database
-	stmt, err := db.Prepare("INSERT INTO accidents (vehicle_id, incident_type, incident_description, reported_time) VALUES (?, ?, ?, ?)")
+	stmt, err := db.Prepare("INSERT INTO accidents (vehicle_id, incident_type, incident_description, reported_time) VALUES (:vehicle_id, :incident_type, :incident_description, :reported_time)")
 	if err != nil {
-		log.Fatalf("Failed to prepare insert statement: %v", err)
+		return fmt.Errorf("failed to prepare insert statement: %w", err)
 	}
-	_, err = stmt.Exec(report.VehicleID, report.Type, report.Description, report.ReportedTime)
+	_, err = stmt.Exec(sql.Named("vehicle_id", report.VehicleID), sql.Named("incident_type", report.Type), sql.Named("incident_description", report.Description), sql.Named("reported_time", report.ReportedTime))
 	if err != nil {
-		log.Fatalf("Failed to insert accident report into database: %v", err)
+		return fmt.Errorf("failed to insert accident report into database: %w", err)
 	}
 
-	fmt.Printf("Accident report created: %v\n", report)
+	log.Printf("Accident report created: %v\n", report)
+
+	return nil
 }
