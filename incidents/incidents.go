@@ -21,13 +21,8 @@ type Accident struct {
 	VehicleID int
 }
 
-func main() {
-	// Open a database connection
-	db, err := sql.Open("mysql", "user:password@tcp(localhost:3306)/driver_management")
-	if err != nil {
-		log.Fatalf("Failed to connect to database: %v", err)
-	}
-	defer db.Close()
+func accident() {
+	
 
 	// Create an accident report
 	report := Accident{

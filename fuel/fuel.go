@@ -13,7 +13,7 @@ type FuelConsumption struct {
     FuelQuantity float64
 }
 
-func main() {
+func fuel() {
     // Example fuel consumption data entered by user
     input := map[string]string{
         "vehicleID":    "1",

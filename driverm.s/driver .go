@@ -19,7 +19,7 @@ type Driver struct {
 	Status       string
 }
 
-func main() {
+func driver() {
 	// Open a database connection
 	db, err := sql.Open("mysql", "user:password@tcp(localhost:3306)/driver_management")
 	//db, err := sql.Open("sqlite3", "./driver_management.db")
